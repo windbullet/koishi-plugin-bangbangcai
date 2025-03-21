@@ -138,18 +138,18 @@ ${config.recrop ? `(输入 重切 可以重新随机裁剪图片，至多${confi
       let cropTimes = 0
 
       const dispose = ctx.channel(session.channelId).middleware(async (session, next) => {
-        if (nicknames.includes(session.content.toLowerCase())) {
+        if (nicknames.includes(session.stripped.content.toLowerCase())) {
           dispose()
           disposeTimer()
           games[session.channelId] = false
           await session.send(`正确，${nicknames[7]}：${imageUrl}`)
-          await session.send(`${h.at(session.userId)} ${config.phrase_answered}${session.content.toLowerCase()}\n${h.image(image, "image/jpeg")}`)
-        } else if (session.content === "bzd") {
+          await session.send(`${h.at(session.userId)} ${config.phrase_answered}${session.stripped.content.toLowerCase()}\n${h.image(image, "image/jpeg")}`)
+        } else if (session.stripped.content === "bzd") {
           dispose()
           disposeTimer()
           games[session.channelId] = false
           await session.send(`${h.at(session.userId)} ${config.phrase_bzd}${nicknames[7]}\n${h.image(image, "image/jpeg")}`)
-        } else if (session.content === "重切") {
+        } else if (session.stripped.content === "重切") {
           if (!config.recrop) {
             return next()
           } else if (cropTimes >= config.max_recrop_times) {
